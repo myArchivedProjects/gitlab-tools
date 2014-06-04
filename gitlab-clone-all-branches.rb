@@ -24,7 +24,7 @@ projects = Gitlab.projects(:per_page => 1000 )
 def git_clone(basedir, origin)
   puts "processing: #{ origin }"
   pwd = Dir.pwd
-  Dir.mkdir(basedir)
+  Dir.exists?(basedir) ? nil : Dir.mkdir(basedir)
   Dir.chdir(basedir)
   %x( git clone "#{ origin }" )
   Dir.chdir(pwd)
@@ -34,7 +34,9 @@ end
 def git_pull(basedir, repository)
   puts "doing a git pull on: #{ basedir }/#{ repository }"
   pwd = Dir.pwd
+  puts Dir.pwd
   Dir.chdir( "#{ basedir }/#{ repository }")
+  puts Dir.pwd
   %x( git-up )
   Dir.chdir(pwd)
 end
@@ -44,7 +46,7 @@ projects.each do |project|
   basedir = project.to_hash["path_with_namespace"].split('/')[0]
   repository = project.to_hash["path_with_namespace"].split('/')[1]
 
-  Dir.exist?(basedir) ? git_pull(basedir, repository) : git_clone(basedir, origin)
+  Dir.exist?("#{basedir}/#{repository}") ? git_pull(basedir, repository) : git_clone(basedir, origin)
 
 end
 
