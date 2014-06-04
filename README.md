@@ -6,7 +6,7 @@ gem install gitlab
 then do a:
 gitlab-clone-all-branches.rb
 
-and it will clone all the gitlab repositories locally
+and it will pull all the gitlab repositories locally
 
 
 
